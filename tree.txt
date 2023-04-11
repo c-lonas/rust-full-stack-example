@@ -1,0 +1,81 @@
+├── backend\
+│   ├── migrations\
+│   │   ├──V1__create_users_table.sql
+│   │   ├──V2__create_users_table_nodrop copy.sql
+│   │   ├──V3__create_income_table copy 2.sql
+│   │   ├──V4__drop_income_table.sql
+│   │   ├──V5__create_income_table_unsigned_amount.sql
+│   │   └──V6__alter_user_table_unsigned_user_id.sql
+│   │
+│   ├── src\
+│   │   ├── api\
+│   │   │   ├──income_routes.rs
+│   │   │   ├──mod.rs
+│   │   │   └──user_routes.rs
+│   │   │
+│   │   ├── db\
+│   │   │   ├──connection.rs
+│   │   │   ├──income_repository.rs
+│   │   │   ├──mod.rs
+│   │   │   └──user_repository.rs
+│   │   │
+│   │   ├── middleware\
+│   │   │   ├──cors.rs
+│   │   │   └──mod.rs
+│   │   │
+│   │   └──main.rs
+│   │
+│   ├──.env
+│   ├──.gitignore
+│   ├──Cargo.lock
+│   ├──Cargo.toml
+│   ├──dev_commands
+│   └──refinery.toml
+│
+├── frontend\
+│   ├── sass\
+│   │   ├──main.scss
+│   │   ├──_base.scss
+│   │   ├──_card.scss
+│   │   ├──_dashboard.scss
+│   │   ├──_layout.scss
+│   │   └──_vars.scss
+│   │
+│   ├── src\
+│   │   ├── components\
+│   │   │   ├── card_components\
+│   │   │   │   ├──add_income_form.rs
+│   │   │   │   └──mod.rs
+│   │   │   │
+│   │   │   ├──card_manager.rs
+│   │   │   ├──dashboard.rs
+│   │   │   ├──footer.rs
+│   │   │   ├──header.rs
+│   │   │   ├──main_content.rs
+│   │   │   └──navbar.rs
+│   │   │
+│   │   ├──active_card.rs
+│   │   ├──api_error.rs
+│   │   └──main.rs
+│   │
+│   ├──.gitignore
+│   ├──build.rs
+│   ├──Cargo.lock
+│   ├──Cargo.toml
+│   ├──index.html
+│   └──main.css
+│
+├── shared\
+│   ├── src\
+│   │   ├── models\
+│   │   │   ├──income.rs
+│   │   │   ├──mod.rs
+│   │   │   └──user.rs
+│   │   │
+│   │   └──lib.rs
+│   │
+│   ├──.gitignore
+│   ├──Cargo.lock
+│   └──Cargo.toml
+│
+└──tree.txt

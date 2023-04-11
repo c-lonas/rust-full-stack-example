@@ -1,0 +1,27 @@
+[package]
+name = "frontend"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+shared = { path = "../shared" }
+
+yew = { version = "0.20", features = ["csr"] }
+yew-router = "0.17.0"
+serde = { version = "1.0", features = ["derive"] }
+web-sys = "0.3.61"
+wasm-bindgen = "0.2.84"
+reqwest = { version = "0.11.16", features = ["json"] }
+gloo = "0.8.0"
+gloo-timers = "0.2.6"
+yew-oauth2 = "0.5.0"
+log = "0.4.17"
+web_logger = "0.2.0"
+dotenvy = "0.15.7"
+dotenvy_macro = "0.15.7"
+
+[build-dependencies]
+grass = "0.12.3"
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+getrandom = { version = "0.2", features = ["js"] }

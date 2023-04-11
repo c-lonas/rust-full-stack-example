@@ -1,0 +1,102 @@
+@import "vars";
+
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: $header-color;
+  color: $text-color;
+  height: 70px;
+  box-shadow: 0 4px 6px $box-shadow-color;
+}
+
+.main-header h1 {
+  font-size: 32px;
+}
+
+.main-nav,
+.auth-nav {
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.main-nav a,
+.auth-nav a,
+.navbar button {
+  transition: all 0.3s;
+}
+
+.main-nav a:hover,
+.auth-nav a:hover {
+  color: $text-color;
+}
+
+.main-nav ul,
+.auth-nav ul {
+  list-style: none;
+}
+
+.main-nav li,
+.auth-nav li {
+  margin-left: 20px;
+  display: inline-block;
+}
+
+.main-nav a,
+.auth-nav a {
+  text-decoration: none;
+  color: $text-color;
+  font-weight: bold;
+}
+
+.main-nav a:hover,
+.auth-nav a:hover {
+  color: $hover-color;
+}
+
+/* Sidebar CSS */
+.navbar {
+  background-color: $header-color;
+  width: 200px;
+  height: 100%;
+  position: fixed;
+  padding: 20px;
+  box-shadow: 0 4px 6px $box-shadow-color;
+}
+
+.navbar ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.navbar li {
+  margin-bottom: 10px;
+}
+
+.navbar button {
+  background-color: $navbar-color;
+  color: $text-color;
+  border: none;
+  cursor: pointer;
+  padding: 10px 20px;
+  text-align: left;
+  width: 100%;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.navbar button:hover {
+  background-color: $hover-color;
+}
+
+/* Footer CSS */
+.footer {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  padding: 20px;
+  background-color: $header-color;
+  color: $text-color;
+}

@@ -1,0 +1,63 @@
+@import "vars";
+
+%card-shared-styles {
+  font-size: 18px;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+/* Add Income Form CSS */
+.add-income-form {
+  background-color: $card-bg-color;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px $box-shadow-color;
+  margin: 1rem auto;
+  padding: 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h2 {
+    font-size: 26px;
+    margin-bottom: 1rem;
+  }
+
+  input,
+  button {
+    @extend %card-shared-styles;
+  }
+
+  &.success {
+    background-color: $success-color;
+    transition: background-color 0.3s ease-out;
+  }
+}
+
+.card-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  width: 100%;
+  height: 100%;
+
+  .card-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: $overlay-bg-color;
+    z-index: 800;
+  }
+
+  .form-wrapper {
+    z-index: 1002;
+  }
+}
