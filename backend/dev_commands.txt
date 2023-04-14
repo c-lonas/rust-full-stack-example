@@ -1,0 +1,8 @@
+mysql -u personal_finance_user -h localhost personal_finance_tracker -p < migrations/down/002_drop_income_and_expense.sql
+
+
+rptree . -o tree.txt -f target dist .git
+
+
+
+mysql -u personal_finance_user -p your_database_name < migrations/down/001_drop_users.sql
