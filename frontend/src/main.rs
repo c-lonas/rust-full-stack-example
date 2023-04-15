@@ -21,10 +21,6 @@ use gloo::utils::document;
 use wasm_bindgen::JsCast;
 use web_sys::Element;
 use dotenvy::dotenv;
-use dotenvy_macro::dotenv;
-// use std::env;
-// use yew_oauth2::prelude::*;
-use yew_oauth2::oauth2::*;
 
 use components::footer::Footer;
 use components::header::Header;
@@ -37,14 +33,6 @@ use active_card::{ ActiveCard, CardType };
 #[function_component(App)]
 fn app() -> Html {
     dotenv().ok();
-
-    // Auth config
-    let client_id = dotenv!("GOOGLE_CLIENT_ID");
-    let config = Config {
-        client_id: client_id.into(),
-        auth_url: "https://accounts.google.com/o/oauth2/auth".into(),
-        token_url: "https://oauth2.googleapis.com/token".into(),
-    };
 
 
     // Card manager config
@@ -67,20 +55,18 @@ fn app() -> Html {
     };
 
     html! {
-        <OAuth2 config={config}>
-            <main>
-                <Header />
-                <Navbar on_add_income_click={ show_add_income_form.clone() }/>
-                {
-                    create_portal(
-                        html! { <CardManager active_card={(*active_card).card.clone()} on_close={close_active_card.clone()} /> },
-                        document().body().unwrap().dyn_into::<Element>().unwrap(),
-                    )
-                }
-                <Dashboard />
-                <Footer />
-            </main>
-        </OAuth2>
+        <main>
+            <Header />
+            <Navbar on_add_income_click={ show_add_income_form.clone() }/>
+            {
+                create_portal(
+                    html! { <CardManager active_card={(*active_card).card.clone()} on_close={close_active_card.clone()} /> },
+                    document().body().unwrap().dyn_into::<Element>().unwrap(),
+                )
+            }
+            <Dashboard />
+            <Footer />
+        </main>
     }
 }
 

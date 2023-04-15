@@ -1,4 +1,4 @@
 /target
 .env
 refinery.toml
-dev_commands
+dev_commands.txt

@@ -16,6 +16,7 @@ mod api {
 mod middleware {
     pub mod cors;
     pub mod auth;
+    pub mod session;
 }
 
 use rocket::fs::FileServer;

@@ -14,11 +14,10 @@ wasm-bindgen = "0.2.84"
 reqwest = { version = "0.11.16", features = ["json"] }
 gloo = "0.8.0"
 gloo-timers = "0.2.6"
-yew-oauth2 = "0.5.0"
 log = "0.4.17"
 web_logger = "0.2.0"
 dotenvy = "0.15.7"
-dotenvy_macro = "0.15.7"
+# dotenvy_macro = "0.15.7"
 
 [build-dependencies]
 grass = "0.12.3"

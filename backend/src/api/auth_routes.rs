@@ -1,7 +1,6 @@
 use rocket::serde::json::{Json, Value};
 use serde::{Deserialize, Serialize};
 use serde_json::json;
-// use gcp_auth::{AuthenticationManager};
 use std::env;
 use rocket::http::Status;
 use rocket::response::status;
@@ -10,8 +9,10 @@ use jsonwebtoken::{decode, DecodingKey, Validation, Algorithm};
 use sqlx::{Pool, MySql};
 use rocket::State;
 
+use uuid::Uuid;
+
 use crate::middleware::auth:: { fetch_and_store_google_public_keys };
-use crate::db::user_repository::{ find_or_create_user };
+use crate::db::user_repository::{ find_or_create_user, create_session };
 
 #[derive(Deserialize)]
 pub struct AuthCode {
@@ -19,8 +20,9 @@ pub struct AuthCode {
 }
 
 #[derive(Serialize)]
-pub struct AccessTokenResponse {
+pub struct AuthResponse {
     access_token: String,
+    session_id: String,
 }
 
 #[derive(Debug, Deserialize)]
@@ -30,12 +32,11 @@ struct GoogleIdTokenClaims {
     email_verified: bool,
 }
 
-
 #[post("/handle_auth_code", data = "<auth_code>")]
 pub async fn handle_auth_code(
     pool: &State<&Pool<MySql>>,
     auth_code: Json<AuthCode>
-) -> Result<Json<AccessTokenResponse>, status::Custom<Value>> {
+) -> Result<Json<AuthResponse>, status::Custom<Value>> {
     let client_id = env::var("GOOGLE_CLIENT_ID").unwrap();
     let client_secret = env::var("GOOGLE_CLIENT_SECRET").unwrap();
     let redirect_uri = env::var("REDIRECT_URI").unwrap();
@@ -56,9 +57,6 @@ pub async fn handle_auth_code(
             Status::InternalServerError,
             json!({ "error": format!("Token request error: {:?}", e) }),
         )
-
-
-        
     })?;
 
     if token_response.status().is_success() {
@@ -75,8 +73,6 @@ pub async fn handle_auth_code(
         let access_token = token_data["access_token"].as_str().unwrap().to_string();
         let id_token = token_data["id_token"].as_str().unwrap().to_string();
 
-
-
         let google_id_token_claims = decode_google_id_token(&id_token).await;
         // Check if the email is verified
         if !google_id_token_claims.email_verified {
@@ -86,7 +82,6 @@ pub async fn handle_auth_code(
             ));
         }
 
-        // Call find_or_create_user with the email from google_id_token_claims
         let user = find_or_create_user(pool.inner(), &google_id_token_claims.email).await.map_err(|e| {
             status::Custom(
                 Status::InternalServerError,
@@ -94,8 +89,14 @@ pub async fn handle_auth_code(
             )
         })?;
 
+        let session_id = create_session(pool.inner(), user.id).await.map_err(|e| {
+            status::Custom(
+                Status::InternalServerError,
+                json!({ "error": format!("Failed to create session: {:?}", e) }),
+            )
+        })?;
 
-        Ok(Json(AccessTokenResponse { access_token }))
+        Ok(Json(AuthResponse { access_token, session_id }))
 
     } else {
         Err(status::Custom(
@@ -104,7 +105,6 @@ pub async fn handle_auth_code(
         ))
     }
 }
-
 
 async fn decode_google_id_token(id_token: &str) -> GoogleIdTokenClaims {
     let validation = Validation {
@@ -134,7 +134,3 @@ async fn decode_google_id_token(id_token: &str) -> GoogleIdTokenClaims {
         Err(_) => panic!("Invalid ID token"),
     }
 }
-
-
-
-
