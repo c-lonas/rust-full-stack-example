@@ -8,21 +8,17 @@ mod db {
 }
 
 mod api {
-    pub mod auth_routes;
     pub mod user_routes;
     pub mod income_routes;
 }
 
 mod middleware {
     pub mod cors;
-    pub mod auth;
-    pub mod session;
 }
 
 use rocket::fs::FileServer;
 use dotenvy::dotenv;
 use crate::db::connection;
-use crate::api::auth_routes::handle_auth_code;
 use crate::api::user_routes::{
     create_user,
     get_user_by_id,
@@ -53,8 +49,6 @@ async fn rocket() -> _ {
         .mount(
             "/api",
             routes![
-                // Auth routes
-                handle_auth_code,
                 // User routes
                 create_user,
                 get_user_by_id,
