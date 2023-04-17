@@ -5,6 +5,7 @@ pub struct ActiveCard {
 #[derive(Clone, PartialEq)]
 pub enum CardType {
     AddIncomeForm,
+    ManageDemoProfiles
     // You can add more card types here
 }
 

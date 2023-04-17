@@ -24,6 +24,17 @@ pub fn card_manager(props: &Props) -> Html {
                     </div>
                 }
             }
+            CardType::ManageDemoProfiles => {
+                html! {
+                    <div class="card-container">
+                        <div class="card-overlay" onclick={props.on_close.clone()}></div>
+                        <div class="form-wrapper">
+                            <h1>{"Manage Demo Profiles"}</h1>
+                            <p>{"This is a demo card. You can add more cards here."}</p>
+                        </div>
+                    </div>
+                }
+            }
         },
     }
 }
