@@ -5,8 +5,13 @@ use dotenvy::dotenv;
 // use log::info;
 // use web_logger;
 
+#[derive(Properties, Clone, PartialEq)]
+pub struct Props {
+    pub on_manage_demo_profiles_click: Callback<MouseEvent>,
+}
+
 #[function_component(Header)]
-pub fn header() -> Html {
+pub fn header(props: &Props) -> Html {
 
     dotenv().ok();
 
@@ -21,9 +26,11 @@ pub fn header() -> Html {
                     <li><a href="#">{ "Details" }</a></li>
                 </ul>
             </nav>
-            <nav class="auth-nav">
+            <nav class="setting-nav">
                 <ul>
-                    <li><a href="#">{ "Manage Demo Profiles" }</a></li>
+                    <li>
+                        <button onclick={props.on_manage_demo_profiles_click.clone()}>{ "Manage Demo Profiles" }</button>
+                    </li>
                     <li><a href="#">{ "Settings" }</a></li>
                 </ul>
             </nav>

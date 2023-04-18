@@ -1,5 +1,6 @@
 use yew::prelude::*;
 use crate::components::card_components::add_income_form::AddIncomeForm;
+use crate::components::card_components::manage_demo_profiles_card::ManageDemoProfilesCard;
 use crate::active_card::{CardType};
 
 #[derive(Properties, Clone, PartialEq, Default)]
@@ -29,8 +30,7 @@ pub fn card_manager(props: &Props) -> Html {
                     <div class="card-container">
                         <div class="card-overlay" onclick={props.on_close.clone()}></div>
                         <div class="form-wrapper">
-                            <h1>{"Manage Demo Profiles"}</h1>
-                            <p>{"This is a demo card. You can add more cards here."}</p>
+                            <ManageDemoProfilesCard on_close={props.on_close.clone()} />
                         </div>
                     </div>
                 }

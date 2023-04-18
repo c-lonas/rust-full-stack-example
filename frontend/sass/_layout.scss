@@ -16,43 +16,57 @@
 }
 
 .main-nav,
-.auth-nav {
+.setting-nav {
   margin: 0;
   padding: 0;
   display: flex;
 }
 
 .main-nav a,
-.auth-nav a,
+.setting-nav a,
 .navbar button {
   transition: all 0.3s;
 }
 
 .main-nav a:hover,
-.auth-nav a:hover {
+.setting-nav a:hover {
   color: $text-color;
 }
 
+
 .main-nav ul,
-.auth-nav ul {
+.setting-nav ul {
   list-style: none;
 }
 
 .main-nav li,
-.auth-nav li {
+.setting-nav li {
   margin-left: 20px;
   display: inline-block;
 }
 
+.setting-nav button {
+  background-color: $navbar-color;
+  color: $text-color;
+  border: none;
+  cursor: pointer;
+  padding: 10px 20px;
+  text-align: left;
+  width: 100%;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
 .main-nav a,
-.auth-nav a {
+.setting-nav a,
+.setting-nav button {
   text-decoration: none;
   color: $text-color;
   font-weight: bold;
 }
 
 .main-nav a:hover,
-.auth-nav a:hover {
+.setting-nav a:hover {
   color: $hover-color;
 }
 

@@ -13,13 +13,11 @@ use log::info;
 use crate::api_error::ApiError;
 
 
-const HARDCODED_USER_ID: u32 = 1; // Temporary hardcoded value to represent user_id - to be replaced when authentication is implemented
+const HARDCODED_USER_ID: u32 = 1; // Temporary hardcoded value to represent user_id - to be replaced when demo profiles are implemented
 
 
 pub struct AddIncomeForm {
-    // props: Props,
     user_income: IncomeCreate,
-    // on_submit: Callback<SubmitEvent>,
     submission_status: SubmissionStatus,
     submission_task: Option<Timeout>,
 }
@@ -38,12 +36,10 @@ impl Default for Props {
     }
 }
 
-
 pub enum SubmissionStatus {
     Idle,
     Success,
 }
-
 
 pub enum Msg {
     UpdateIncome(IncomeCreate),
@@ -172,7 +168,7 @@ impl Component for AddIncomeForm {
     };
 
 
-    let user_id = HARDCODED_USER_ID;     // Temporary hardcoded value to represent user_id - to be replaced when authentication is implemented
+    let user_id = HARDCODED_USER_ID;     // Temporary hardcoded value to represent user_id - to be replaced when demo profiles are implemented
 
 
     // clone values for the Name field

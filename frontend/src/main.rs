@@ -38,6 +38,14 @@ fn app() -> Html {
     // Card manager config
     let active_card = use_state(|| ActiveCard::new());
 
+    let show_manage_demo_profiles_card = {
+        let active_card = active_card.clone();
+        Callback::from(move |_| {
+            info!("Show Manage Demo Profiles Card");
+            active_card.set(ActiveCard { card: Some(CardType::ManageDemoProfiles) });
+        })
+    };
+
     let show_add_income_form = {
         let active_card = active_card.clone();
         Callback::from(move |_| {
@@ -54,9 +62,10 @@ fn app() -> Html {
         })
     };
 
+
     html! {
         <main>
-            <Header />
+            <Header on_manage_demo_profiles_click={ show_manage_demo_profiles_card.clone() }/>
             <Navbar on_add_income_click={ show_add_income_form.clone() }/>
             {
                 create_portal(
