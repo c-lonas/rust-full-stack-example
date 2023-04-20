@@ -22,8 +22,8 @@ use crate::db::connection;
 use crate::api::user_routes::{
     create_user,
     get_user_by_id,
-    update_user_email,
     delete_user_by_id,
+    get_all_users
 };
 use crate::api::income_routes::{
     create_income_route,
@@ -52,8 +52,8 @@ async fn rocket() -> _ {
                 // User routes
                 create_user,
                 get_user_by_id,
-                update_user_email,
                 delete_user_by_id,
+                get_all_users,
                 // Income routes
                 create_income_route,
                 get_income_by_user_id_route,

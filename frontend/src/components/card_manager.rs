@@ -12,7 +12,7 @@ pub struct Props {
 #[function_component(CardManager)]
 pub fn card_manager(props: &Props) -> Html {
     match &props.active_card {
-        None => html! { <div>{""}</div> }, // Return an empty div if there is no active card (otherwise none of the cards will render)
+        None => html! { <div></div> }, // Return an empty div if there is no active card (otherwise none of the cards will render)
       
         Some(card_type) => match card_type {
             CardType::AddIncomeForm => {

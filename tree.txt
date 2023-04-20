@@ -1,11 +1,15 @@
 ├── backend\
 │   ├── migrations\
-│   │   ├──V1__create_users_table.sql
-│   │   ├──V2__create_users_table_nodrop copy.sql
-│   │   ├──V3__create_income_table copy 2.sql
-│   │   ├──V4__drop_income_table.sql
-│   │   ├──V5__create_income_table_unsigned_amount.sql
-│   │   └──V6__alter_user_table_unsigned_user_id.sql
+│   │   ├── down\
+│   │   │   ├──001_drop_users.sql
+│   │   │   ├──002_drop_income_and_expense.sql
+│   │   │   └──003_drop_sessions.sql
+│   │   │
+│   │   └── up\
+│   │       ├──001_create_users.sql
+│   │       ├──002_create_income_and_expense.sql
+│   │       └──003_create_sessions.sql
+│   │
 │   │
 │   ├── src\
 │   │   ├── api\
@@ -23,13 +27,15 @@
 │   │   │   ├──cors.rs
 │   │   │   └──mod.rs
 │   │   │
+│   │   ├── models\
+│   │   │
 │   │   └──main.rs
 │   │
 │   ├──.env
 │   ├──.gitignore
 │   ├──Cargo.lock
 │   ├──Cargo.toml
-│   ├──dev_commands
+│   ├──dev_commands.txt
 │   └──refinery.toml
 │
 ├── frontend\
@@ -45,6 +51,7 @@
 │   │   ├── components\
 │   │   │   ├── card_components\
 │   │   │   │   ├──add_income_form.rs
+│   │   │   │   ├──manage_demo_profiles_card.rs
 │   │   │   │   └──mod.rs
 │   │   │   │
 │   │   │   ├──card_manager.rs
@@ -58,6 +65,7 @@
 │   │   ├──api_error.rs
 │   │   └──main.rs
 │   │
+│   ├──.env
 │   ├──.gitignore
 │   ├──build.rs
 │   ├──Cargo.lock

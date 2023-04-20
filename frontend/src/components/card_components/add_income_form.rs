@@ -2,9 +2,6 @@ use yew::{prelude::*, Context};
 use yew::events::InputEvent;
 use yew::classes;
 use gloo_timers::callback::Timeout;
-// use reqwest::Client;
-// use wasm_bindgen::JsValue;
-
 use shared::income::IncomeCreate;
 use wasm_bindgen::JsCast;
 use log::info;
@@ -144,12 +141,6 @@ impl Component for AddIncomeForm {
                 ctx.props().on_close.emit(MouseEvent::new("click").unwrap()); // to do: add error handling
                 true
             }
-            // Redo the Msg::CloseForm function to handle the error
-            
-
-
-
-
 
             Msg::NoOp => false, // Don't re-render the component
         }
@@ -187,7 +178,7 @@ impl Component for AddIncomeForm {
     let user_income_amount3 = self.user_income.amount;
 
     html! {
-        <div class= {classes!("add-income-form", success_class)} >
+        <div class= {classes!("card-main", success_class)} >
             <h2>{ "Add Income" }</h2>
             <input
                 placeholder="Name"

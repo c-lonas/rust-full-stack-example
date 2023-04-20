@@ -244,6 +244,7 @@ dependencies = [
  "serde",
  "shared",
  "wasm-bindgen",
+ "wasm-bindgen-futures",
  "web-sys",
  "web_logger",
  "yew",

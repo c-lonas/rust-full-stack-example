@@ -9,14 +9,15 @@ shared = { path = "../shared" }
 yew = { version = "0.20", features = ["csr"] }
 yew-router = "0.17.0"
 serde = { version = "1.0", features = ["derive"] }
-web-sys = "0.3.61"
-wasm-bindgen = "0.2.84"
+web-sys = { version = "0.3.61", features = ["HtmlSelectElement"]}
+wasm-bindgen = { version = "0.2.84" }
 reqwest = { version = "0.11.16", features = ["json"] }
 gloo = "0.8.0"
 gloo-timers = "0.2.6"
 log = "0.4.17"
 web_logger = "0.2.0"
 dotenvy = "0.15.7"
+wasm-bindgen-futures = "0.4.34"
 # dotenvy_macro = "0.15.7"
 
 [build-dependencies]

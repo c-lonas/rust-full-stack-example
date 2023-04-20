@@ -7,9 +7,9 @@ use sqlx::{Pool, MySql};
 
 use shared::user::{User, UserCreate};
 use crate::db::user_repository::{
+    get_all_users as get_all_users_db,
     create_user as create_user_db,
     get_user_by_id as get_user_by_id_db,
-    update_user_email as update_user_email_db,
     delete_user_by_id as delete_user_by_id_db,
 };
 
@@ -46,22 +46,22 @@ pub async fn get_user_by_id(
 }
 
 
-// UPDATE email address for existing user
-#[put("/users/<id>", data = "<new_user_email>")]
-pub async fn update_user_email(
-    pool: &State<Pool<MySql>>,
-    id: u32,
-    new_user_email: &str
-) -> Result<status::Custom<Json<User>>, status::BadRequest<String>> {
+// // UPDATE email address for existing user
+// #[put("/users/<id>", data = "<new_user_email>")]
+// pub async fn update_user_email(
+//     pool: &State<Pool<MySql>>,
+//     id: u32,
+//     new_user_email: &str
+// ) -> Result<status::Custom<Json<User>>, status::BadRequest<String>> {
     
-    match update_user_email_db(pool.inner(), id, new_user_email).await {
-        Ok(user) => {
-            let response = status::Custom(Status::Ok, Json(user));
-            Ok(response)
-        }
-        Err(e) => Err(status::BadRequest(Some(e.to_string()))),
-    }
-}
+//     match update_user_email_db(pool.inner(), id, new_user_email).await {
+//         Ok(user) => {
+//             let response = status::Custom(Status::Ok, Json(user));
+//             Ok(response)
+//         }
+//         Err(e) => Err(status::BadRequest(Some(e.to_string()))),
+//     }
+// }
 
 
 // DELETE existing user
@@ -73,6 +73,23 @@ pub async fn delete_user_by_id(
     
     match delete_user_by_id_db(pool.inner(), id).await {
         Ok(_) => Ok(Status::NoContent),
+        Err(e) => Err(status::BadRequest(Some(e.to_string()))),
+    }
+}
+
+
+
+
+// Fetch all users
+#[get("/users")]
+pub async fn get_all_users(
+    pool: &State<Pool<MySql>>,
+) -> Result<Json<Vec<User>>, status::BadRequest<String>> {
+    
+    match get_all_users_db(pool.inner()).await {
+        Ok(users) => {
+           Ok(Json(users)) 
+        }
         Err(e) => Err(status::BadRequest(Some(e.to_string()))),
     }
 }
