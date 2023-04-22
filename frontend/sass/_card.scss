@@ -6,7 +6,6 @@
   width: 100%;
 }
 
-/* Add Income Form CSS */
 .card-main {
   background-color: $card-bg-color;
   border-radius: 5px;
@@ -18,13 +17,19 @@
   flex-direction: column;
   align-items: center;
 
+  h1 {
+    font-size: 45px;
+    margin-bottom: 2rem;
+  }
+
   h2 {
     font-size: 26px;
     margin-bottom: 1rem;
   }
 
   input,
-  button {
+  button,
+  select {
     @extend %card-shared-styles;
   }
 
@@ -59,5 +64,28 @@
 
   .form-wrapper {
     z-index: 1002;
+  }
+}
+
+
+
+/* manage demo profiles card*/
+.manage-profiles-card {
+
+  .manage-profiles-sections {
+    display: flex;
+  }
+  .select-profile-section {
+    margin: 0 2rem;
+
+  }
+  .create-new-user-section {
+
+  }
+  .vertical-divider {
+    width: 1px;
+    height: 300px;
+    background-color: #ccc;
+    margin: 2rem;
   }
 }

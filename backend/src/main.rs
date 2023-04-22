@@ -33,8 +33,6 @@ use crate::api::income_routes::{
     options_income_route
 };
 use crate::middleware::cors::CORS;
-// use crate::middleware::auth::Auth;
-
 
 #[launch]
 async fn rocket() -> _ {

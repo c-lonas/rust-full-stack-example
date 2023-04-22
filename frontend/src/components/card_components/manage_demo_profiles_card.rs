@@ -155,59 +155,62 @@ impl Component for ManageDemoProfilesCard {
         });
 
         html! {
-            <div class= {classes!("card-main")}>
+            <div class= {classes!("card-main", "manage-profiles-card")}>
                 <h1>{"Manage Demo Profiles"}</h1>
-                <div>
-                    <h2>{"Select a user"}</h2>
-                    <select
-                        value={self.selected_user.as_ref().map(|user| user.id.to_string()).unwrap_or_default()}
+                <div class = {classes!("manage-profiles-sections")}>
+                    <div class = {classes!("select-profile-section")}>
+                        <h2>{"Select a user"}</h2>
+                        <select
+                            value={self.selected_user.as_ref().map(|user| user.id.to_string()).unwrap_or_default()}
 
-                        onchange={ctx.link().callback({
-                            let users = self.users.clone();
-                            move |event: Event| {
+                            onchange={ctx.link().callback({
+                                let users = self.users.clone();
+                                move |event: Event| {
+                                    if let Some(target) = event.target() {
+                                        if let Ok(select_element) = target.dyn_into::<web_sys::HtmlSelectElement>() {
+                                            let value = select_element.value().parse::<u32>().ok();
+                                            let selected_user = value.and_then(|id| {
+                                                users.iter().find(|user| user.id == id).cloned()
+                                            });
+                                            Msg::UserSelected(selected_user)
+                                        } else {
+                                            Msg::NoOp
+                                        }
+                                    } else {
+                                        Msg::NoOp
+                                    }
+                                }
+                            })}
+
+                        >
+                            <option value="" disabled=true>{"Select a user"}</option>
+                            { for users_dropdown }
+                        </select>
+                    </div>
+                    <div class= {classes!("vertical-divider")}></div>
+                    <div class= {classes!("create-new-user-section")}>
+                        <h2>{"Create new user"}</h2>
+                        <input
+                            placeholder="Name"
+                            value={self.new_user_name.clone()}
+                            oninput={ctx.link().callback(|event: InputEvent| {
                                 if let Some(target) = event.target() {
-                                    if let Ok(select_element) = target.dyn_into::<web_sys::HtmlSelectElement>() {
-                                        let value = select_element.value().parse::<u32>().ok();
-                                        let selected_user = value.and_then(|id| {
-                                            users.iter().find(|user| user.id == id).cloned()
-                                        });
-                                        Msg::UserSelected(selected_user)
+                                    if let Ok(input_element) = target.dyn_into::<web_sys::HtmlInputElement>() {
+                                        Msg::UpdateNewUserName(input_element.value())
                                     } else {
                                         Msg::NoOp
                                     }
                                 } else {
                                     Msg::NoOp
                                 }
-                            }
-                        })}
-
-                    >
-                        <option value="" disabled=true>{"Select a user"}</option>
-                        { for users_dropdown }
-                    </select>
-                </div>
-                <div>
-                    <h2>{"Create new user"}</h2>
-                    <input
-                        placeholder="Name"
-                        value={self.new_user_name.clone()}
-                        oninput={ctx.link().callback(|event: InputEvent| {
-                            if let Some(target) = event.target() {
-                                if let Ok(input_element) = target.dyn_into::<web_sys::HtmlInputElement>() {
-                                    Msg::UpdateNewUserName(input_element.value())
-                                } else {
-                                    Msg::NoOp
-                                }
-                            } else {
-                                Msg::NoOp
-                            }
-                        })}
-                    />
-                    <button
-                        onclick={ctx.link().callback(|_| Msg::CreateUser)}
-                    >
-                        { "Create" }
-                    </button>
+                            })}
+                        />
+                        <button
+                            onclick={ctx.link().callback(|_| Msg::CreateUser)}
+                        >
+                            { "Create" }
+                        </button>
+                    </div>
                 </div>
             </div>
         }

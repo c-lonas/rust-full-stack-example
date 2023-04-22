@@ -2,8 +2,6 @@ use sqlx::{Pool, MySql};
 use sqlx::mysql::{MySqlRow};
 use sqlx::Row;
 use shared::models::user::{User, UserCreate};
-use uuid::Uuid;
-
 
 pub async fn get_all_users(pool: &Pool<MySql>) -> Result<Vec<User>, sqlx::Error> {
     let users: Vec<User> = sqlx::query("SELECT  id, username FROM users")
