@@ -9,10 +9,6 @@ use log::info;
 
 use crate::api_error::ApiError;
 
-
-const HARDCODED_USER_ID: u32 = 1; // Temporary hardcoded value to represent user_id - to be replaced when demo profiles are implemented
-
-
 pub struct AddIncomeForm {
     user_income: IncomeCreate,
     submission_status: SubmissionStatus,
@@ -23,12 +19,17 @@ pub struct AddIncomeForm {
 #[derive(Properties, Clone, PartialEq)]
 pub struct Props {
     pub on_close: Callback<MouseEvent>,
+    pub selected_user_id: Option<u32>,
+    pub user_name: Option<String>,
 }
 
 impl Default for Props {
     fn default() -> Self {
         Props {
             on_close: Callback::noop(),
+            selected_user_id: Some(0),
+            user_name: Some("Unknown".to_owned())
+   
         }
     }
 }
@@ -49,10 +50,10 @@ pub enum Msg {
 }
 
 
-async fn submit_income(income: IncomeCreate) -> Result<(), ApiError> {
+async fn submit_income(user_id: u32, income: IncomeCreate) -> Result<(), ApiError> {
     let client = reqwest::Client::new();
     let response = client.post("http://localhost:8000/api/income")
-        .json(&IncomeCreate { user_id: HARDCODED_USER_ID, ..income })
+        .json(&IncomeCreate { user_id, ..income })
         .send()
         .await?;
 
@@ -80,11 +81,16 @@ impl Component for AddIncomeForm {
 
     
 
-    fn create(_ctx: &Context<Self>) -> Self {
+    fn create(ctx: &Context<Self>) -> Self {
         Self {
             // props: Props::default(),
-            user_income: IncomeCreate::default(),
-            // on_submit: Callback::noop(),
+            user_income: IncomeCreate {
+                user_id: match ctx.props().selected_user_id {
+                    Some(id) => id,
+                    None => 0 
+                },
+                ..IncomeCreate::default()
+            },
             submission_status: SubmissionStatus::Idle,
             submission_task: None,
         }
@@ -102,10 +108,17 @@ impl Component for AddIncomeForm {
                     log::warn!("Invalid input: Name or Amount is empty or incorrect");
                     return false;
                 }
+                let selected_user_id = ctx.props().selected_user_id;
+
                 let income = self.user_income.clone();
                 let link = ctx.link().clone();
                 ctx.link().send_future(async move {
-                    match submit_income(income).await {
+                    let user_id = match selected_user_id {
+                        Some(id) => id,
+                        None => 0,
+                    };
+                    
+                    match submit_income(user_id, income).await {
                         Ok(_) => {
                             link.send_message(Msg::UpdateIncome(IncomeCreate::default()));
                             link.send_message(Msg::SubmissionStatus(SubmissionStatus::Success));
@@ -153,124 +166,131 @@ impl Component for AddIncomeForm {
 
     fn view(&self, ctx: &Context<Self>) -> Html {
 
-    let success_class = match self.submission_status {
-        SubmissionStatus::Idle => "",
-        SubmissionStatus::Success => "success",
-    };
+        let success_class = match self.submission_status {
+            SubmissionStatus::Idle => "",
+            SubmissionStatus::Success => "success",
+        };
+
+        let user_id = match ctx.props().selected_user_id {
+            Some(id) => id,
+            None => 0, 
+        };
 
 
-    let user_id = HARDCODED_USER_ID;     // Temporary hardcoded value to represent user_id - to be replaced when demo profiles are implemented
+        let unknown_user = String::from("Unknown");
+        let user_name = ctx.props().user_name.as_ref().unwrap_or(&unknown_user);
 
 
-    // clone values for the Name field
-    let user_income_name1 = self.user_income.name.clone();
-    let user_income_description1 = self.user_income.description.clone();
-    let user_income_amount1 = self.user_income.amount;
+        // clone values for the Name field
+        let user_income_name1 = self.user_income.name.clone();
+        let user_income_description1 = self.user_income.description.clone();
+        let user_income_amount1 = self.user_income.amount;
 
-    // clone values for the Description field
-    let user_income_name2 = self.user_income.name.clone();
-    let user_income_description2 = self.user_income.description.clone();
-    let user_income_amount2 = self.user_income.amount;
+        // clone values for the Description field
+        let user_income_name2 = self.user_income.name.clone();
+        let user_income_description2 = self.user_income.description.clone();
+        let user_income_amount2 = self.user_income.amount;
 
-    // clone values for the Amount field
-    let user_income_name3 = self.user_income.name.clone();
-    let user_income_description3 = self.user_income.description.clone();
-    let user_income_amount3 = self.user_income.amount;
+        // clone values for the Amount field
+        let user_income_name3 = self.user_income.name.clone();
+        let user_income_description3 = self.user_income.description.clone();
+        let user_income_amount3 = self.user_income.amount;
 
-    html! {
-        <div class= {classes!("card-main", success_class)} >
-            <h2>{ "Add Income" }</h2>
-            <input
-                placeholder="Name"
-                value={user_income_name1.clone()}
-                oninput={ctx.link().callback(move |event: InputEvent| {
-                    let name_clone = user_income_name1.clone();
-                    let description_clone = user_income_description1.clone();
-                    let amount_clone = user_income_amount1;
+        html! {
+            <div class= {classes!("card-main", success_class)} >
+                <h2>{ "Add Income for:" }</h2>
+                <h2>{ format!("Demo User: {} | Id: {}", user_name, user_id) }</h2>
+                <input
+                    placeholder="Income Name"
+                    value={user_income_name1.clone()}
+                    oninput={ctx.link().callback(move |event: InputEvent| {
+                        let name_clone = user_income_name1.clone();
+                        let description_clone = user_income_description1.clone();
+                        let amount_clone = user_income_amount1;
 
-                    if let Some(target) = event.target() {
-                        if let Ok(input_element) = target.dyn_into::<web_sys::HtmlInputElement>() {
-                            let name = input_element.value();
-                            let msg = Msg::UpdateIncome(IncomeCreate { user_id, name, ..IncomeCreate {
-                                user_id,
-                                name: name_clone,
-                                description: description_clone,
-                                amount: amount_clone,
-                            }});
-                            return msg;
-                        }
-                    }
-                    Msg::NoOp
-                })}
-            />
-            <input
-                placeholder="Description"
-                value={self.user_income.description.clone().unwrap_or_default()}
-                oninput={ctx.link().callback(move |event: InputEvent| {
-                    let name_clone = user_income_name2.clone();
-                    let description_clone = user_income_description2.clone();
-                    let amount_clone = user_income_amount2;
-
-                    if let Some(target) = event.target() {
-                        if let Ok(input_element) = target.dyn_into::<web_sys::HtmlInputElement>() {
-                            let description = input_element.value();
-                            let msg = Msg::UpdateIncome(IncomeCreate { user_id, description: Some(description), ..IncomeCreate {
-                                user_id,
-                                name: name_clone,
-                                description: description_clone,
-                                amount: amount_clone,
-                            }});
-                            return msg;
-                        }
-                    }
-                    Msg::NoOp
-                })}
-            />
-            <input
-                placeholder="Amount"
-                value={user_income_amount3.to_string()}
-                oninput={ctx.link().callback(move |event: InputEvent| {
-                    let name_clone = user_income_name3.clone();
-                    let description_clone = user_income_description3.clone();
-                    let amount_clone = user_income_amount3;
-
-                    if let Some(target) = event.target() {
-                        if let Ok(input_element) = target.dyn_into::<web_sys::HtmlInputElement>() {
-                            if let Ok(amount) = input_element.value().parse::<u32>() {
-                                let msg = Msg::UpdateIncome(IncomeCreate { user_id, amount, ..IncomeCreate {
+                        if let Some(target) = event.target() {
+                            if let Ok(input_element) = target.dyn_into::<web_sys::HtmlInputElement>() {
+                                let name = input_element.value();
+                                let msg = Msg::UpdateIncome(IncomeCreate { user_id, name, ..IncomeCreate {
                                     user_id,
                                     name: name_clone,
                                     description: description_clone,
                                     amount: amount_clone,
                                 }});
                                 return msg;
-                            } else {
-                                return Msg::NoOp;
                             }
                         }
-                    }
-                    Msg::NoOp
-                })}
-            />
-                <button
-                    onclick={ctx.link().callback(|_| {
-                        info!("Submit button clicked");
-                        Msg::SubmitForm
+                        Msg::NoOp
                     })}
-                >
-                    { "Submit" }    
-                </button>
-                <button
-                    onclick={ctx.link().callback(|_| {
-                        info!("Close button clicked");
-                        Msg::CloseForm
-                    })}
-                >
-                    { "X" }
-                </button>
+                />
+                <input
+                    placeholder="Income Description"
+                    value={self.user_income.description.clone().unwrap_or_default()}
+                    oninput={ctx.link().callback(move |event: InputEvent| {
+                        let name_clone = user_income_name2.clone();
+                        let description_clone = user_income_description2.clone();
+                        let amount_clone = user_income_amount2;
 
-            </div>
-        }
+                        if let Some(target) = event.target() {
+                            if let Ok(input_element) = target.dyn_into::<web_sys::HtmlInputElement>() {
+                                let description = input_element.value();
+                                let msg = Msg::UpdateIncome(IncomeCreate { user_id, description: Some(description), ..IncomeCreate {
+                                    user_id,
+                                    name: name_clone,
+                                    description: description_clone,
+                                    amount: amount_clone,
+                                }});
+                                return msg;
+                            }
+                        }
+                        Msg::NoOp
+                    })}
+                />
+                <input
+                    placeholder="Amount"
+                    value={user_income_amount3.to_string()}
+                    oninput={ctx.link().callback(move |event: InputEvent| {
+                        let name_clone = user_income_name3.clone();
+                        let description_clone = user_income_description3.clone();
+                        let amount_clone = user_income_amount3;
+
+                        if let Some(target) = event.target() {
+                            if let Ok(input_element) = target.dyn_into::<web_sys::HtmlInputElement>() {
+                                if let Ok(amount) = input_element.value().parse::<u32>() {
+                                    let msg = Msg::UpdateIncome(IncomeCreate { user_id, amount, ..IncomeCreate {
+                                        user_id,
+                                        name: name_clone,
+                                        description: description_clone,
+                                        amount: amount_clone,
+                                    }});
+                                    return msg;
+                                } else {
+                                    return Msg::NoOp;
+                                }
+                            }
+                        }
+                        Msg::NoOp
+                    })}
+                />
+                    <button
+                        onclick={ctx.link().callback(|_| {
+                            info!("Submit button clicked");
+                            Msg::SubmitForm
+                        })}
+                    >
+                        { "Submit" }    
+                    </button>
+                    <button
+                        onclick={ctx.link().callback(|_| {
+                            info!("Close button clicked");
+                            Msg::CloseForm
+                        })}
+                    >
+                        { "X" }
+                    </button>
+
+                </div>
+            }
     }
 
 }

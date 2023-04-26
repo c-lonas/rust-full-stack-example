@@ -10,7 +10,6 @@ use shared::user::UserCreate;
 use web_sys::{Event};
 
 
-
 pub struct ManageDemoProfilesCard {
     users: Vec<User>,
     selected_user: Option<User>,
@@ -216,4 +215,3 @@ impl Component for ManageDemoProfilesCard {
         }
     }
 }
-

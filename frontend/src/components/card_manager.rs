@@ -7,6 +7,8 @@ use crate::active_card::{CardType};
 pub struct Props {
     pub active_card: Option<CardType>,
     pub on_close: Callback<MouseEvent>,
+    pub selected_user_id: Option<u32>,
+    pub user_name: Option<String>,
 }
 
 #[function_component(CardManager)]
@@ -20,7 +22,11 @@ pub fn card_manager(props: &Props) -> Html {
                     <div class="card-container">
                         <div class="card-overlay" onclick={props.on_close.clone()}></div>
                         <div class="form-wrapper">
-                            <AddIncomeForm on_close={props.on_close.clone()} />
+                            <AddIncomeForm 
+                                on_close={ props.on_close.clone() } 
+                                selected_user_id={ props.selected_user_id }
+                                user_name={ props.user_name.clone() }
+                            />
                         </div>
                     </div>
                 }
