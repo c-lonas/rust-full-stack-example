@@ -9,10 +9,13 @@ pub struct Props {
     pub on_close: Callback<MouseEvent>,
     pub selected_user_id: Option<u32>,
     pub user_name: Option<String>,
+    pub on_selected_user_id_update: Callback<Option<u32>>,
 }
 
 #[function_component(CardManager)]
 pub fn card_manager(props: &Props) -> Html {
+    info!("CardManager selected_user_id_update prop: {:?}", props.selected_user_id);
+    info!("CardManager on_selected_user_id_update prop: {:?}", props.on_selected_user_id_update);
     match &props.active_card {
         None => html! { <div></div> }, // Return an empty div if there is no active card (otherwise none of the cards will render)
       
@@ -36,7 +39,12 @@ pub fn card_manager(props: &Props) -> Html {
                     <div class="card-container">
                         <div class="card-overlay" onclick={props.on_close.clone()}></div>
                         <div class="form-wrapper">
-                            <ManageDemoProfilesCard on_close={props.on_close.clone()} />
+                            <ManageDemoProfilesCard
+                                on_close={props.on_close.clone()} 
+                                on_selected_user_id_update={props.on_selected_user_id_update.clone()}
+                                selected_user_id={props.selected_user_id}
+                                
+                            />
                         </div>
                     </div>
                 }

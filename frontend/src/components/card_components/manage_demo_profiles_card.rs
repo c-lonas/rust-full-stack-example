@@ -19,12 +19,16 @@ pub struct ManageDemoProfilesCard {
 #[derive(Properties, Clone, PartialEq)]
 pub struct Props {
     pub on_close: Callback<MouseEvent>,
+    pub on_selected_user_id_update: Callback<Option<u32>>,
+    pub selected_user_id: Option<u32>,
 }
 
 impl Default for Props {
     fn default() -> Self {
         Props {
             on_close: Callback::noop(),
+            on_selected_user_id_update: Callback::noop(),
+            selected_user_id: None,
         }
     }
 }
@@ -33,6 +37,7 @@ pub enum Msg {
     FetchUsers,
     UsersFetched(Result<Vec<User>, ApiError>),
     UserSelected(Option<User>),
+    UpdateSelectedUserId(Option<u32>),
     UpdateNewUserName(String),
     CreateUser,
     UserCreated(Result<User, ApiError>),
@@ -81,14 +86,19 @@ impl Component for ManageDemoProfilesCard {
             selected_user: None,
             new_user_name: String::new(),
         };
+
+
         ctx.link().send_message(Msg::FetchUsers);
+
+
+        ctx.link().send_message(Msg::NoOp);
         component
     }
 
     fn update(&mut self, ctx: &Context<Self>, msg: Self::Message) -> bool {
         match msg {
             Msg::FetchUsers => {
-                info!("Fetching users...");
+                // info!("Fetching users...");
                 ctx.link().send_future(async {
                     Msg::UsersFetched(fetch_users().await)
                 });
@@ -96,7 +106,7 @@ impl Component for ManageDemoProfilesCard {
                 false
             }
             Msg::UsersFetched(Ok(users)) => {
-                info!("Users fetched: {:?}", users);
+                // info!("Users fetched: {:?}", users);
                 self.users = users;
                 true
             }
@@ -104,10 +114,34 @@ impl Component for ManageDemoProfilesCard {
                 info!("Error fetching users: {:?}", err);
                 false
             }
+            // Msg::UserSelected(user) => {
+            //     info!("UserSelected: {:?}", user);
+            //     self.selected_user = user.clone();
+            //     if let Some(user) = user {
+            //         ctx.link().send_message(Msg::UpdateSelectedUserId(Some(user.id)));
+            //     } else {
+            //         ctx.link().send_message(Msg::UpdateSelectedUserId(None));
+            //     }
+            //     false
+            // }
+
             Msg::UserSelected(user) => {
-                self.selected_user = user;
-                true
+                info!("UserSelected: {:?}", user);
+                self.selected_user = user.clone();
+                if let Some(user) = user {
+                    ctx.link().send_message(Msg::UpdateSelectedUserId(Some(user.id)));
+                } else {
+                    ctx.link().send_message(Msg::UpdateSelectedUserId(None));
+                }
+                false
             }
+            Msg::UpdateSelectedUserId(user_id) => {
+                ctx.props().on_selected_user_id_update.emit(user_id);
+                false
+            }
+
+
+
             Msg::UpdateNewUserName(name) => {
                 self.new_user_name = name;
                 true
@@ -118,7 +152,6 @@ impl Component for ManageDemoProfilesCard {
                     return false;
                 }
                 let username = self.new_user_name.clone();
-                // let link = ctx.link().clone();
                 ctx.link().send_future(async move {
                     Msg::UserCreated(create_user(username).await)
                 });
@@ -144,7 +177,7 @@ impl Component for ManageDemoProfilesCard {
     }
 
     fn view(&self, ctx: &Context<Self>) -> Html {
-        info!("Rendering view with users: {:?}", self.users);
+        // info!("Rendering view with users: {:?}", self.users);
         let users_dropdown = self.users.iter().map(|user| {
             let user_id = user.id;
             let user_name = user.username.clone();
@@ -171,6 +204,7 @@ impl Component for ManageDemoProfilesCard {
                                             let selected_user = value.and_then(|id| {
                                                 users.iter().find(|user| user.id == id).cloned()
                                             });
+                                            info!("Setting selected_user to: {:?}", selected_user);
                                             Msg::UserSelected(selected_user)
                                         } else {
                                             Msg::NoOp

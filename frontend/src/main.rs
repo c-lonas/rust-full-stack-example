@@ -15,7 +15,7 @@ mod components {
 mod api_error;
 mod active_card;
 
-use yew::prelude::*;
+use yew::{ prelude::* };
 use yew::create_portal;
 use gloo::utils::document;
 use wasm_bindgen::JsCast;
@@ -62,6 +62,24 @@ fn app() -> Html {
         })
     };
 
+    // let handle_selected_user_id_update = Callback::from(move |user_id: Option<u32>| {
+    //     log::info!("Setting User ID: {:?}", user_id);
+    //     selected_user_id.set(user_id)
+    // });
+
+    let selected_user_id = use_state(|| None::<u32>);
+    let user_name = use_state(|| None::<String>);
+
+
+    
+
+    let update_selected_user_id = {
+        let selected_user_id = selected_user_id.clone();
+        Callback::from(move |new_user_id: Option<u32>| {
+            selected_user_id.set(new_user_id);
+        })
+    };
+
 
     html! {
         <main>
@@ -69,7 +87,15 @@ fn app() -> Html {
             <Navbar on_add_income_click={ show_add_income_form.clone() }/>
             {
                 create_portal(
-                    html! { <CardManager active_card={(*active_card).card.clone()} on_close={close_active_card.clone()} /> },
+                    html! { <CardManager 
+                            active_card={(*active_card).card.clone()} 
+                            on_close={close_active_card.clone()}
+                            on_selected_user_id_update={update_selected_user_id.clone()}
+                            selected_user_id={(*selected_user_id).clone()}
+                            user_name={(*user_name).clone()}
+                            
+                            /> 
+                          },
                     document().body().unwrap().dyn_into::<Element>().unwrap(),
                 )
             }
