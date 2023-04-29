@@ -245,3 +245,20 @@ body {
 .manage-profiles-card .card-vertical-spacer {
   margin: 3rem 0;
 }
+.manage-profiles-card .user-list {
+  background-color: #222020;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+.manage-profiles-card .user-list-item {
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 3px;
+}
+.manage-profiles-card .user-list-item:hover {
+  background-color: #f0f0f0;
+  color: #222020;
+}

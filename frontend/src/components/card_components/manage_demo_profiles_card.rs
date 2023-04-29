@@ -159,7 +159,7 @@ impl Component for ManageDemoProfilesCard {
                     Msg::UserCreated(create_user(username).await)
                 });
                 ctx.link().send_message(Msg::NoOp);
-                false
+                true
             }
 
             Msg::UserCreated(Ok(user)) => {
@@ -189,13 +189,25 @@ impl Component for ManageDemoProfilesCard {
 
 
     fn view(&self, ctx: &Context<Self>) -> Html {
-        let users_dropdown = self.users.iter().map(|user| {
+        let link = ctx.link();
+
+        let users_list = self.users.iter().map(|user| {
             let user_id = user.id;
             let user_name = user.username.clone();
+            let user_clone = user.clone();
+            let user_selected_callback = link.callback(move |_| {
+                Msg::UserSelected(Some(user_clone.clone()))
+            });
+
             html! {
-                <option value={user_id.to_string()}>{user_name}</option>
+                <div class="user-list-item" onclick={user_selected_callback}>
+                    {user_name}
+                </div>
             }
-        });
+        }).collect::<Vec<Html>>();
+
+
+
 
         let unknown_user = String::from("Unknown");
         let user_name = ctx.props().user_name.as_ref().unwrap_or(&unknown_user);
@@ -215,33 +227,10 @@ impl Component for ManageDemoProfilesCard {
                         </div>
                         <div class = {classes!("select-new-current-user-section")}>
                             <h2>{"Select a user"}</h2>
-                            <select
-                                value={self.selected_user.as_ref().map(|user| user.id.to_string()).unwrap_or_default()}
+                            <div class="user-list">
+                                { for users_list }
+                            </div>
 
-                                onchange={ctx.link().callback({
-                                    let users = self.users.clone();
-                                    move |event: Event| {
-                                        if let Some(target) = event.target() {
-                                            if let Ok(select_element) = target.dyn_into::<web_sys::HtmlSelectElement>() {
-                                                let value = select_element.value().parse::<u32>().ok();
-                                                let selected_user = value.and_then(|id| {
-                                                    users.iter().find(|user| user.id == id).cloned()
-                                                });
-                                                info!("Setting selected_user to: {:?}", selected_user);
-                                                Msg::UserSelected(selected_user)
-                                            } else {
-                                                Msg::NoOp
-                                            }
-                                        } else {
-                                            Msg::NoOp
-                                        }
-                                    }
-                                })}
-
-                            >
-                                <option value="" disabled=true>{"Select a user"}</option>
-                                { for users_dropdown }
-                            </select>
                         </div>
                     </div>
                     <div class= {classes!("vertical-divider")}></div>
