@@ -160,9 +160,17 @@ impl Component for AddIncomeForm {
     }
 
 
-    fn changed(&mut self, _ctx: &Context<Self>, _props: &Self::Properties) -> bool {
-        false // Change this to true if the component should re-render
+    fn changed(&mut self, ctx: &Context<Self>, props: &Self::Properties) -> bool {
+        if self.user_income.user_id != props.selected_user_id.unwrap_or(0) {
+            self.user_income.user_id = props.selected_user_id.unwrap_or(0);
+            true
+        } else if ctx.props().user_name != props.user_name {
+            false
+        } else {
+            false
+        }
     }
+
 
     fn view(&self, ctx: &Context<Self>) -> Html {
 

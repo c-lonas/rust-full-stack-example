@@ -10,6 +10,7 @@ pub struct Props {
     pub selected_user_id: Option<u32>,
     pub user_name: Option<String>,
     pub on_selected_user_id_update: Callback<Option<u32>>,
+    pub on_selected_user_name_update: Callback<Option<String>>
 }
 
 #[function_component(CardManager)]
@@ -34,15 +35,18 @@ pub fn card_manager(props: &Props) -> Html {
                     </div>
                 }
             }
+            
             CardType::ManageDemoProfiles => {
                 html! {
                     <div class="card-container">
-                        <div class="card-overlay" onclick={props.on_close.clone()}></div>
+                        <div class="card-overlay" onclick={ props.on_close.clone() }></div>
                         <div class="form-wrapper">
                             <ManageDemoProfilesCard
                                 on_close={props.on_close.clone()} 
-                                on_selected_user_id_update={props.on_selected_user_id_update.clone()}
-                                selected_user_id={props.selected_user_id}
+                                on_selected_user_id_update={ props.on_selected_user_id_update.clone() }
+                                on_selected_user_name_update={ props.on_selected_user_name_update.clone() }
+                                selected_user_id={ props.selected_user_id }
+                                user_name={ props.user_name.clone() }
                                 
                             />
                         </div>

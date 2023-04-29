@@ -2,7 +2,7 @@ use yew::{prelude::*, Context};
 use yew::events::InputEvent;
 use shared::user::User;
 use wasm_bindgen::{ JsCast };
-use wasm_bindgen_futures::spawn_local;
+// use wasm_bindgen_futures::spawn_local;
 use reqwest::Client;
 use log::info;
 use crate::api_error::ApiError;
@@ -19,16 +19,20 @@ pub struct ManageDemoProfilesCard {
 #[derive(Properties, Clone, PartialEq)]
 pub struct Props {
     pub on_close: Callback<MouseEvent>,
+    pub on_selected_user_name_update: Callback<Option<String>>,
     pub on_selected_user_id_update: Callback<Option<u32>>,
     pub selected_user_id: Option<u32>,
+    pub user_name: Option<String>,
 }
 
 impl Default for Props {
     fn default() -> Self {
         Props {
             on_close: Callback::noop(),
+            on_selected_user_name_update: Callback::noop(),
             on_selected_user_id_update: Callback::noop(),
             selected_user_id: None,
+            user_name: Some("Unknown".to_owned())
         }
     }
 }
@@ -38,6 +42,7 @@ pub enum Msg {
     UsersFetched(Result<Vec<User>, ApiError>),
     UserSelected(Option<User>),
     UpdateSelectedUserId(Option<u32>),
+    UpdateSelectedUserName(Option<String>),
     UpdateNewUserName(String),
     CreateUser,
     UserCreated(Result<User, ApiError>),
@@ -85,6 +90,7 @@ impl Component for ManageDemoProfilesCard {
             users: Vec::new(),
             selected_user: None,
             new_user_name: String::new(),
+            // user_name: None,
         };
 
 
@@ -114,38 +120,35 @@ impl Component for ManageDemoProfilesCard {
                 info!("Error fetching users: {:?}", err);
                 false
             }
-            // Msg::UserSelected(user) => {
-            //     info!("UserSelected: {:?}", user);
-            //     self.selected_user = user.clone();
-            //     if let Some(user) = user {
-            //         ctx.link().send_message(Msg::UpdateSelectedUserId(Some(user.id)));
-            //     } else {
-            //         ctx.link().send_message(Msg::UpdateSelectedUserId(None));
-            //     }
-            //     false
-            // }
 
             Msg::UserSelected(user) => {
                 info!("UserSelected: {:?}", user);
                 self.selected_user = user.clone();
                 if let Some(user) = user {
                     ctx.link().send_message(Msg::UpdateSelectedUserId(Some(user.id)));
+                    ctx.link().send_message(Msg::UpdateSelectedUserName(Some(user.username.clone()))); 
                 } else {
                     ctx.link().send_message(Msg::UpdateSelectedUserId(None));
+                    ctx.link().send_message(Msg::UpdateSelectedUserName(None)); 
                 }
                 false
             }
+
+            Msg::UpdateSelectedUserName(user_name) => {
+                ctx.props().on_selected_user_name_update.emit(user_name);
+                false
+            }
+
             Msg::UpdateSelectedUserId(user_id) => {
                 ctx.props().on_selected_user_id_update.emit(user_id);
                 false
             }
 
-
-
             Msg::UpdateNewUserName(name) => {
                 self.new_user_name = name;
                 true
             }
+
             Msg::CreateUser => {
                 if self.new_user_name.is_empty() {
                     log::warn!("Invalid input: User name is empty");
@@ -158,26 +161,34 @@ impl Component for ManageDemoProfilesCard {
                 ctx.link().send_message(Msg::NoOp);
                 false
             }
+
             Msg::UserCreated(Ok(user)) => {
                 self.users.push(user);
                 self.new_user_name.clear();
                 true
             }
+
             Msg::UserCreated(Err(err)) => {
                 log::error!("Error creating user: {:?}", err);
                 false
             }
+
             Msg::NoOp => false,
         }
     }
 
 
-    fn changed(&mut self, _ctx: &Context<Self>, _props: &Self::Properties) -> bool {
-        false
+    fn changed(&mut self, ctx: &Context<Self>, props: &Self::Properties) -> bool {
+        if props != &*ctx.props() {
+            true
+        } else {
+            false
+        }
     }
 
+
+
     fn view(&self, ctx: &Context<Self>) -> Html {
-        // info!("Rendering view with users: {:?}", self.users);
         let users_dropdown = self.users.iter().map(|user| {
             let user_id = user.id;
             let user_name = user.username.clone();
@@ -186,41 +197,55 @@ impl Component for ManageDemoProfilesCard {
             }
         });
 
+        let unknown_user = String::from("Unknown");
+        let user_name = ctx.props().user_name.as_ref().unwrap_or(&unknown_user);
+
         html! {
             <div class= {classes!("card-main", "manage-profiles-card")}>
                 <h1>{"Manage Demo Profiles"}</h1>
                 <div class = {classes!("manage-profiles-sections")}>
                     <div class = {classes!("select-profile-section")}>
-                        <h2>{"Select a user"}</h2>
-                        <select
-                            value={self.selected_user.as_ref().map(|user| user.id.to_string()).unwrap_or_default()}
+                        <div class = {classes!("display-current-user-section")}>
+                            <h2>{"Current user"}</h2>
+                            <h3>{ format!("{}", user_name) }</h3>
 
-                            onchange={ctx.link().callback({
-                                let users = self.users.clone();
-                                move |event: Event| {
-                                    if let Some(target) = event.target() {
-                                        if let Ok(select_element) = target.dyn_into::<web_sys::HtmlSelectElement>() {
-                                            let value = select_element.value().parse::<u32>().ok();
-                                            let selected_user = value.and_then(|id| {
-                                                users.iter().find(|user| user.id == id).cloned()
-                                            });
-                                            info!("Setting selected_user to: {:?}", selected_user);
-                                            Msg::UserSelected(selected_user)
+
+                        </div>
+                        <div class = {classes!("card-vertical-spacer")}>
+                        </div>
+                        <div class = {classes!("select-new-current-user-section")}>
+                            <h2>{"Select a user"}</h2>
+                            <select
+                                value={self.selected_user.as_ref().map(|user| user.id.to_string()).unwrap_or_default()}
+
+                                onchange={ctx.link().callback({
+                                    let users = self.users.clone();
+                                    move |event: Event| {
+                                        if let Some(target) = event.target() {
+                                            if let Ok(select_element) = target.dyn_into::<web_sys::HtmlSelectElement>() {
+                                                let value = select_element.value().parse::<u32>().ok();
+                                                let selected_user = value.and_then(|id| {
+                                                    users.iter().find(|user| user.id == id).cloned()
+                                                });
+                                                info!("Setting selected_user to: {:?}", selected_user);
+                                                Msg::UserSelected(selected_user)
+                                            } else {
+                                                Msg::NoOp
+                                            }
                                         } else {
                                             Msg::NoOp
                                         }
-                                    } else {
-                                        Msg::NoOp
                                     }
-                                }
-                            })}
+                                })}
 
-                        >
-                            <option value="" disabled=true>{"Select a user"}</option>
-                            { for users_dropdown }
-                        </select>
+                            >
+                                <option value="" disabled=true>{"Select a user"}</option>
+                                { for users_dropdown }
+                            </select>
+                        </div>
                     </div>
                     <div class= {classes!("vertical-divider")}></div>
+
                     <div class= {classes!("create-new-user-section")}>
                         <h2>{"Create new user"}</h2>
                         <input
@@ -238,9 +263,7 @@ impl Component for ManageDemoProfilesCard {
                                 }
                             })}
                         />
-                        <button
-                            onclick={ctx.link().callback(|_| Msg::CreateUser)}
-                        >
+                        <button onclick={ctx.link().callback(|_| Msg::CreateUser)}>
                             { "Create" }
                         </button>
                     </div>

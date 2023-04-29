@@ -80,6 +80,14 @@ fn app() -> Html {
         })
     };
 
+    let update_user_name = {
+        let user_name = user_name.clone();
+        Callback::from(move |new_user_name: Option<String>| {
+            user_name.set(new_user_name);
+        })
+    };
+
+
 
     html! {
         <main>
@@ -92,6 +100,7 @@ fn app() -> Html {
                             on_close={close_active_card.clone()}
                             on_selected_user_id_update={update_selected_user_id.clone()}
                             selected_user_id={(*selected_user_id).clone()}
+                            on_selected_user_name_update={update_user_name.clone()}
                             user_name={(*user_name).clone()}
                             
                             /> 

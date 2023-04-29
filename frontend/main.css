@@ -194,6 +194,10 @@ body {
   font-size: 26px;
   margin-bottom: 1rem;
 }
+.card-main h3 {
+  font-size: 20px;
+  margin-bottom: 1rem;
+}
 .card-main.success {
   background-color: rgba(0, 255, 0, 0.589);
   transition: background-color 0.3s ease-out;
@@ -237,4 +241,7 @@ body {
   height: 300px;
   background-color: #ccc;
   margin: 2rem;
+}
+.manage-profiles-card .card-vertical-spacer {
+  margin: 3rem 0;
 }
