@@ -8,17 +8,21 @@ use dotenvy::dotenv;
 #[derive(Properties, Clone, PartialEq)]
 pub struct Props {
     pub on_manage_demo_profiles_click: Callback<MouseEvent>,
+    pub user_name: Option<String>,
 }
 
 #[function_component(Header)]
 pub fn header(props: &Props) -> Html {
+
+    let unknown_user = String::from("Unknown");
+    let user_name = props.user_name.as_ref().unwrap_or(&unknown_user);
 
     dotenv().ok();
 
   
     html! {
         <header class="main-header">
-            <h1>{ "Personal Finance Tracker" }</h1>
+            <h1>{ format!("Finance Tracker: {}", user_name) }</h1>
             <nav class="main-nav">
                 <ul>
                     <li><a href="#">{ "Dashboard" }</a></li>

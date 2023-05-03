@@ -90,7 +90,6 @@ impl Component for ManageDemoProfilesCard {
             users: Vec::new(),
             selected_user: None,
             new_user_name: String::new(),
-            // user_name: None,
         };
 
 

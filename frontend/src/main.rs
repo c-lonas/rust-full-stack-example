@@ -91,7 +91,10 @@ fn app() -> Html {
 
     html! {
         <main>
-            <Header on_manage_demo_profiles_click={ show_manage_demo_profiles_card.clone() }/>
+            <Header 
+                on_manage_demo_profiles_click={ show_manage_demo_profiles_card.clone() }
+                user_name={(*user_name).clone()}
+            />
             <Navbar on_add_income_click={ show_add_income_form.clone() }/>
             {
                 create_portal(
