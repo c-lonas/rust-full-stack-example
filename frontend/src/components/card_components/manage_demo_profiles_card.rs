@@ -7,7 +7,7 @@ use reqwest::Client;
 use log::info;
 use crate::api_error::ApiError;
 use shared::user::UserCreate;
-use web_sys::{Event};
+// use web_sys::{Event};
 
 
 pub struct ManageDemoProfilesCard {
@@ -191,7 +191,7 @@ impl Component for ManageDemoProfilesCard {
         let link = ctx.link();
 
         let users_list = self.users.iter().map(|user| {
-            let user_id = user.id;
+            let _user_id = user.id;
             let user_name = user.username.clone();
             let user_clone = user.clone();
             let user_selected_callback = link.callback(move |_| {

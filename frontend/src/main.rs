@@ -62,16 +62,9 @@ fn app() -> Html {
         })
     };
 
-    // let handle_selected_user_id_update = Callback::from(move |user_id: Option<u32>| {
-    //     log::info!("Setting User ID: {:?}", user_id);
-    //     selected_user_id.set(user_id)
-    // });
-
     let selected_user_id = use_state(|| None::<u32>);
     let user_name = use_state(|| None::<String>);
 
-
-    
 
     let update_selected_user_id = {
         let selected_user_id = selected_user_id.clone();
@@ -111,7 +104,7 @@ fn app() -> Html {
                     document().body().unwrap().dyn_into::<Element>().unwrap(),
                 )
             }
-            <Dashboard />
+            <Dashboard selected_user_id={(*selected_user_id).clone()} />
             <Footer />
         </main>
     }
