@@ -138,18 +138,23 @@ body {
   margin-bottom: 36px;
 }
 
-.dashboard-item {
-  width: 30%;
-  text-align: center;
-  padding: 20px;
-}
-
 .dashboard {
   margin-left: 250px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 20px;
   padding: 20px;
+  justify-content: space-around;
+}
+
+.dashboard-item {
+  flex-basis: 45%;
+  margin-bottom: 1rem;
+  flex-basis: 33.3333333333%;
+  /* Adjust this value to equal the number of cards per row */
+  margin-bottom: 1rem;
+  max-width: 350px;
+  /* Adjust this value to set the maximum width for the cards */
 }
 
 .dashboard-card {
@@ -157,6 +162,8 @@ body {
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  min-height: 200px;
 }
 
 .dashboard-card h3 {
@@ -261,4 +268,15 @@ body {
 .manage-profiles-card .user-list-item:hover {
   background-color: #f0f0f0;
   color: #222020;
+}
+
+.tooltip {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 1000;
 }

@@ -10,6 +10,7 @@ mod components {
     pub mod dashboard;
     pub mod card_manager;
     pub mod card_components;
+    pub mod tooltip;
 }
 
 mod api_error;
@@ -33,7 +34,6 @@ use active_card::{ ActiveCard, CardType };
 #[function_component(App)]
 fn app() -> Html {
     dotenv().ok();
-
 
     // Card manager config
     let active_card = use_state(|| ActiveCard::new());
