@@ -8,6 +8,7 @@
 }
 
 .dashboard {
+  margin-top: 5rem;
   margin-left: 250px;
   display: flex;
   flex-wrap: wrap;
@@ -21,16 +22,17 @@
     margin-bottom: 1rem;
     flex-basis: calc(100% / 3); /* Adjust this value to equal the number of cards per row */
     margin-bottom: 1rem;
-    max-width: 350px; /* Adjust this value to set the maximum width for the cards */;
+    max-width: 400px; 
 }
 
 .dashboard-card {
   background-color: $card-bg-color;
   padding: 20px;
   border-radius: 5px;
-  box-shadow: 0 4px 6px $box-shadow-color;
-  transition: all 0.3s ease;
-  min-height: 200px;
+  box-shadow: 3px 3px 5px $box-shadow-color;
+  transition: all 1s ease;
+  min-height: 250px;
+  font-size: 22px;
 }
 
 
@@ -38,7 +40,22 @@
 .dashboard-card h3 {
   margin-top: 0;
   margin-bottom: 10px;
-  font-size: 28px;
+  font-size: 32px;
   padding-bottom: 10px;
   border-bottom: 1px solid rgba($text-color, 0.1);
+}
+
+
+
+.dashboard-card button {
+  margin: 1rem;
+  background-color: rgba(209, 209, 224, 0.178);
+  color: $text-color;
+  border: none;
+  cursor: pointer;
+  padding: 10px 20px;
+  text-align: left;
+  width: 70%;
+  border-radius: 5px;
+  font-size: 18px;
 }

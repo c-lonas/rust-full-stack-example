@@ -25,7 +25,7 @@ body {
   background-color: #333;
   color: rgb(224, 218, 218);
   height: 70px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(175, 174, 174, 0.616);
 }
 
 .main-header h1 {
@@ -61,7 +61,7 @@ body {
   display: inline-block;
 }
 
-.setting-nav button {
+.main-nav button {
   background-color: #555;
   color: rgb(224, 218, 218);
   border: none;
@@ -89,11 +89,11 @@ body {
 /* Sidebar CSS */
 .navbar {
   background-color: #333;
-  width: 200px;
+  width: 250px;
   height: 100%;
   position: fixed;
   padding: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(175, 174, 174, 0.616);
 }
 
 .navbar ul {
@@ -139,6 +139,7 @@ body {
 }
 
 .dashboard {
+  margin-top: 5rem;
   margin-left: 250px;
   display: flex;
   flex-wrap: wrap;
@@ -153,25 +154,38 @@ body {
   flex-basis: 33.3333333333%;
   /* Adjust this value to equal the number of cards per row */
   margin-bottom: 1rem;
-  max-width: 350px;
-  /* Adjust this value to set the maximum width for the cards */
+  max-width: 400px;
 }
 
 .dashboard-card {
   background-color: rgb(71, 70, 70);
   padding: 20px;
   border-radius: 5px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-  min-height: 200px;
+  box-shadow: 3px 3px 5px rgba(175, 174, 174, 0.616);
+  transition: all 1s ease;
+  min-height: 250px;
+  font-size: 22px;
 }
 
 .dashboard-card h3 {
   margin-top: 0;
   margin-bottom: 10px;
-  font-size: 28px;
+  font-size: 32px;
   padding-bottom: 10px;
   border-bottom: 1px solid rgba(224, 218, 218, 0.1);
+}
+
+.dashboard-card button {
+  margin: 1rem;
+  background-color: rgba(209, 209, 224, 0.178);
+  color: rgb(224, 218, 218);
+  border: none;
+  cursor: pointer;
+  padding: 10px 20px;
+  text-align: left;
+  width: 70%;
+  border-radius: 5px;
+  font-size: 18px;
 }
 
 .card-main input,
@@ -185,7 +199,7 @@ body {
 .card-main {
   background-color: rgb(71, 70, 70);
   border-radius: 5px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(175, 174, 174, 0.616);
   margin: 1rem auto;
   padding: 2rem;
   text-align: center;

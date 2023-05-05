@@ -22,19 +22,17 @@ pub fn header(props: &Props) -> Html {
   
     html! {
         <header class="main-header">
-            <h1>{ format!("Finance Tracker: {}", user_name) }</h1>
+            <h1>{ format!("Current Demo User: {}", user_name) }</h1>
             <nav class="main-nav">
-                <ul>
-                    <li><a href="#">{ "Dashboard" }</a></li>
-                    <li><a href="#">{ "Overview" }</a></li>
-                    <li><a href="#">{ "Details" }</a></li>
-                </ul>
-            </nav>
-            <nav class="setting-nav">
                 <ul>
                     <li>
                         <button onclick={props.on_manage_demo_profiles_click.clone()}>{ "Manage Demo Profiles" }</button>
                     </li>
+                </ul>
+            </nav>
+            <nav class="setting-nav">
+                <ul>
+                    
                     <li><a href="#">{ "Settings" }</a></li>
                 </ul>
             </nav>

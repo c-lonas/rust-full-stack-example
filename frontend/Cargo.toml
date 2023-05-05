@@ -18,6 +18,11 @@ log = "0.4.17"
 web_logger = "0.2.0"
 dotenvy = "0.15.7"
 wasm-bindgen-futures = "0.4.34"
+plotters = {version = "0.3.0"}
+plotters-canvas = "0.3.0"
+sankey = "0.1.2"
+svg = "0.13.1"
+
 # dotenvy_macro = "0.15.7"
 
 [build-dependencies]

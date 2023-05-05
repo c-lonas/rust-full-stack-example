@@ -14,9 +14,8 @@ pub fn navbar(props: &Props) -> Html {
                 <li>
                     <button onclick={props.on_add_income_click.clone()}>{ "Add Income" }</button>
                 </li>
-                <li><button>{ "Add Expense" }</button></li>
-                <li><button>{ "Create Widget" }</button></li>
-                <li><button>{ "Visualize Data" }</button></li>
+                <li><button>{ "Add Fixed Expense" }</button></li>
+                <li><button>{ "Add Variable Expense" }</button></li>
             </ul>
         </nav>
     }

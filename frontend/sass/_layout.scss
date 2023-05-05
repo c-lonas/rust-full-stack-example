@@ -45,7 +45,7 @@
   display: inline-block;
 }
 
-.setting-nav button {
+.main-nav button {
   background-color: $navbar-color;
   color: $text-color;
   border: none;
@@ -73,7 +73,7 @@
 /* Sidebar CSS */
 .navbar {
   background-color: $header-color;
-  width: 200px;
+  width: 250px;
   height: 100%;
   position: fixed;
   padding: 20px;
