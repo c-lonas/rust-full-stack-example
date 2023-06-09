@@ -36,6 +36,14 @@ These APIs are exposed by the frontend to display and manipulate data via the UI
 ## Additional Tools
 This project also demonstrates a simple use case for [rptree](https://github.com/night-cruise/rptree), a command-line tool for generating a directory tree, written in Rust, and the value of being able to filter out directories like 'build' and 'dist'.
 
+## Screenshots
+
+<img src="https://user-images.githubusercontent.com/40669300/244555669-3a6141d0-e0eb-452e-98ad-b3147de96ece.png" width="500">
+
+<img src="https://user-images.githubusercontent.com/40669300/244555682-382d85ae-f0ad-4e7e-932b-dc267aab777c.png" width="500">
+
+<img src="https://user-images.githubusercontent.com/40669300/244555688-2f554b09-8ffa-4dbc-8b01-1cc15d194fe3.png" width="500">
+
 ## License
 
 This project is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
