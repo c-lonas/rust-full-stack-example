@@ -1,4 +1,4 @@
-# Personal Finance Tracker
+# Rust Full Stack Web App Example
 
 ## Introduction
 
